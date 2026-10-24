@@ -45,10 +45,13 @@
             </el-tag>
             <el-tag v-if="selected && !selected.enabled" size="small" type="danger" effect="plain">已停用</el-tag>
           </div>
-          <span class="muted">{{ selected?.location }}</span>
+          <div class="video-actions">
+            <span class="muted">{{ selected?.location }}</span>
+            <el-button text :icon="FullScreen" @click="toggleFullscreen">全屏</el-button>
+          </div>
         </div>
 
-        <div class="video-wrap">
+        <div ref="videoWrapRef" class="video-wrap">
           <img
             v-if="selected && selected.enabled && !streamError"
             :key="streamKey"
@@ -67,6 +70,11 @@
           <div v-if="selected && selected.enabled" class="live-badge">
             <span class="live-dot" />LIVE
           </div>
+          <div class="video-scan" />
+          <span class="corner tl" />
+          <span class="corner tr" />
+          <span class="corner bl" />
+          <span class="corner br" />
         </div>
 
         <div class="metric-row">
@@ -99,7 +107,13 @@
           <el-tag type="danger" effect="dark" size="small">{{ alarms.length }} 条告警</el-tag>
         </div>
         <div class="alarm-scroll">
-          <div v-for="alarm in alarms" :key="alarm.alarmNo" class="alarm-item" @click="openAlarm(alarm)">
+          <div
+            v-for="alarm in alarms"
+            :key="alarm.alarmNo"
+            class="alarm-item"
+            :class="alarm.level?.toLowerCase()"
+            @click="openAlarm(alarm)"
+          >
             <div class="alarm-top">
               <span class="alarm-behavior">{{ behaviorLabel(alarm.behaviorType) }}</span>
               <el-tag :type="levelType(alarm.level)" size="small" effect="dark">{{ levelLabel(alarm.level) }}</el-tag>
@@ -152,6 +166,7 @@ const latest = ref<any>(null)
 const streamKey = ref(0)
 const streamError = ref(false)
 const detailVisible = ref(false)
+const videoWrapRef = ref<HTMLElement>()
 const currentAlarm = ref<any>(null)
 
 const selected = computed(() => cameras.value.find((c) => c.id === selectedId.value))
@@ -177,6 +192,19 @@ function reloadStream() {
 
 function onStreamError() {
   streamError.value = true
+}
+
+async function toggleFullscreen() {
+  if (!videoWrapRef.value) return
+  try {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen()
+    } else {
+      await videoWrapRef.value.requestFullscreen()
+    }
+  } catch {
+    // 浏览器不支持全屏时静默失败
+  }
 }
 
 async function loadCameras() {
@@ -230,7 +258,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .monitor-page {
-  height: calc(100vh - 62px);
+  height: calc(100vh - 58px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -342,16 +370,84 @@ onBeforeUnmount(() => {
   gap: 8px;
 }
 
+.video-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .video-wrap {
   position: relative;
   flex: 1;
   min-height: 0;
-  background: #0b1220;
-  border-radius: 10px;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(30, 58, 138, 0.22), transparent 60%),
+    #070d18;
+  border: 1px solid rgba(56, 189, 248, 0.12);
+  border-radius: 12px;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.video-wrap:fullscreen {
+  border: none;
+  border-radius: 0;
+  background: #000;
+}
+
+.video-wrap:fullscreen .video-frame {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.video-scan {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(148, 163, 184, 0.03) 0,
+    rgba(148, 163, 184, 0.03) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  mix-blend-mode: screen;
+}
+
+.corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: rgba(56, 189, 248, 0.55);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.corner.tl {
+  left: 10px;
+  top: 10px;
+  border-width: 1px 0 0 1px;
+}
+
+.corner.tr {
+  right: 10px;
+  top: 10px;
+  border-width: 1px 1px 0 0;
+}
+
+.corner.bl {
+  left: 10px;
+  bottom: 10px;
+  border-width: 0 0 1px 1px;
+}
+
+.corner.br {
+  right: 10px;
+  bottom: 10px;
+  border-width: 0 1px 1px 0;
 }
 
 .video-frame {
@@ -359,6 +455,8 @@ onBeforeUnmount(() => {
   height: 100%;
   object-fit: contain;
   display: block;
+  position: relative;
+  z-index: 1;
 }
 
 .video-placeholder {
@@ -371,6 +469,7 @@ onBeforeUnmount(() => {
   position: absolute;
   left: 12px;
   top: 12px;
+  z-index: 2;
   background: rgba(15, 23, 42, 0.65);
   color: #fff;
   font-size: 11px;
@@ -404,8 +503,9 @@ onBeforeUnmount(() => {
 }
 
 .metric {
-  background: #f8fafc;
-  border-radius: 9px;
+  background: linear-gradient(180deg, #f8fafc, #f3f7fb);
+  border: 1px solid #eef2f7;
+  border-radius: 10px;
   padding: 9px 12px;
   display: flex;
   flex-direction: column;
@@ -447,11 +547,25 @@ onBeforeUnmount(() => {
 
 .alarm-item {
   padding: 10px 11px;
-  border-radius: 9px;
+  border-radius: 10px;
   border: 1px solid #eef2f7;
+  border-left: 3px solid #cbd5e1;
   margin-bottom: 8px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.16s;
+  background: #fff;
+}
+
+.alarm-item.high {
+  border-left-color: #ef4444;
+}
+
+.alarm-item.medium {
+  border-left-color: #f59e0b;
+}
+
+.alarm-item.low {
+  border-left-color: #10b981;
 }
 
 .alarm-item:hover {

@@ -23,7 +23,7 @@ MODEL_PATH=weights/ppe_best.pt DETECTOR_MODE=yolo DEVICE=mps ./run.sh
 | --- | --- |
 | `weights/ppe_best.pt` | 第三方 PPE 模型（hardhat / no-hardhat / safety vest / no-safety vest） |
 | `weights/yolov8n.pt` | COCO 人物检测，用于人数统计与入侵判定 |
-| `videos/demo_site.mp4` | 4 段真实工地画面拼接的演示视频，配合「AI 实景演示」摄像头使用 |
+| `videos/demo_site.mp4` | 真实工地画面演示视频（人脸已模糊），配合「AI 实景演示」摄像头使用 |
 
 当 `PERSON_MODEL_PATH` 指向的文件存在时，检测流程为：
 

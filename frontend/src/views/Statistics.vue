@@ -13,10 +13,10 @@
     </div>
 
     <div class="stat-grid">
-      <StatCard label="告警总量" :value="summary.todayAlarm || 0" suffix="起" color="#ef4444" hint="今日新增告警" />
-      <StatCard label="待处理" :value="summary.pendingAlarm || 0" suffix="起" color="#f59e0b" hint="需现场核查" />
-      <StatCard label="处置率" :value="summary.handleRate || 0" suffix="%" color="#10b981" hint="今日处置完成比例" />
-      <StatCard label="累计告警" :value="summary.totalAlarm || 0" suffix="起" color="#2563eb" hint="系统上线以来" />
+      <StatCard label="今日告警" :value="summary.todayAlarm || 0" suffix="起" color="#ef4444" hint="今日新增告警" :icon="Bell" />
+      <StatCard label="待处理" :value="summary.pendingAlarm || 0" suffix="起" color="#f59e0b" hint="需现场核查" :icon="Timer" />
+      <StatCard label="处置率" :value="summary.handleRate || 0" suffix="%" color="#10b981" hint="今日处置完成比例" :icon="CircleCheck" />
+      <StatCard label="累计告警" :value="summary.totalAlarm || 0" suffix="起" color="#2563eb" hint="系统上线以来" :icon="TrendCharts" />
     </div>
 
     <div class="grid-2" style="margin-top: 16px">
@@ -67,7 +67,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { Download } from '@element-plus/icons-vue'
+import { Bell, CircleCheck, Download, Timer, TrendCharts } from '@element-plus/icons-vue'
 import StatCard from '@/components/StatCard.vue'
 import ChartPanel from '@/components/ChartPanel.vue'
 import { dashboardApi, exportAlarms } from '@/api'

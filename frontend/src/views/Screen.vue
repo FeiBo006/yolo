@@ -250,6 +250,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .screen {
+  position: relative;
   min-height: 100vh;
   background:
     radial-gradient(circle at 50% -20%, rgba(37, 99, 235, 0.28), transparent 55%),
@@ -260,12 +261,36 @@ onBeforeUnmount(() => {
   overflow: hidden;
 }
 
+.screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(56, 189, 248, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.035) 1px, transparent 1px);
+  background-size: 54px 54px;
+  mask-image: radial-gradient(circle at 50% 30%, #000, transparent 78%);
+  pointer-events: none;
+}
+
 .topbar {
+  position: relative;
   height: 64px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   border-bottom: 1px solid rgba(56, 189, 248, 0.18);
+}
+
+.topbar::after {
+  content: '';
+  position: absolute;
+  left: 24%;
+  right: 24%;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #22d3ee, transparent);
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.65);
 }
 
 .top-left {
@@ -331,6 +356,8 @@ onBeforeUnmount(() => {
 }
 
 .kpi {
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(160deg, rgba(30, 58, 138, 0.28), rgba(15, 23, 42, 0.65));
   border: 1px solid rgba(56, 189, 248, 0.16);
   border-radius: 10px;
@@ -338,6 +365,16 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+.kpi::before {
+  content: '';
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.7), transparent);
 }
 
 .kpi span {
@@ -354,8 +391,8 @@ onBeforeUnmount(() => {
 }
 
 .kpi small {
-  font-size: 11px;
-  color: #64748b;
+  font-size: 13px;
+  color: #94a3b8;
   margin-left: 4px;
   font-weight: 400;
 }
@@ -383,6 +420,7 @@ onBeforeUnmount(() => {
 }
 
 .card {
+  position: relative;
   background: linear-gradient(170deg, rgba(15, 32, 60, 0.72), rgba(8, 18, 36, 0.72));
   border: 1px solid rgba(56, 189, 248, 0.14);
   border-radius: 10px;
@@ -392,6 +430,29 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   flex: 1;
+}
+
+.card::before,
+.card::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: rgba(56, 189, 248, 0.45);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.card::before {
+  left: 0;
+  top: 0;
+  border-width: 1px 0 0 1px;
+}
+
+.card::after {
+  right: 0;
+  bottom: 0;
+  border-width: 0 1px 1px 0;
 }
 
 .card.grow {

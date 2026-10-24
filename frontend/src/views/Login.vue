@@ -19,6 +19,9 @@
 
     <div class="form-side">
       <div class="form-card">
+        <div class="form-logo">
+          <el-icon :size="24"><Monitor /></el-icon>
+        </div>
         <h2>欢迎登录</h2>
         <p class="sub">YUANYU Safety Monitoring Platform</p>
         <el-form ref="formRef" :model="form" :rules="rules" label-position="top" @keyup.enter="submit">
@@ -56,7 +59,7 @@
 import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Bell, DataAnalysis, Lock, User, VideoCamera } from '@element-plus/icons-vue'
+import { Bell, DataAnalysis, Lock, Monitor, User, VideoCamera } from '@element-plus/icons-vue'
 import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
@@ -195,7 +198,10 @@ h1 span {
 }
 
 .form-side {
-  background: #f8fafc;
+  background:
+    radial-gradient(480px 320px at 100% 0%, rgba(37, 99, 235, 0.09), transparent 60%),
+    radial-gradient(420px 320px at 0% 100%, rgba(6, 182, 212, 0.08), transparent 55%),
+    #f8fafc;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -204,7 +210,26 @@ h1 span {
 
 .form-card {
   width: 100%;
-  max-width: 400px;
+  max-width: 404px;
+  padding: 36px 34px 28px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 34px 70px -46px rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(10px);
+}
+
+.form-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 18px;
+  border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, #2563eb, #06b6d4);
+  box-shadow: 0 12px 26px -12px rgba(37, 99, 235, 0.8);
 }
 
 h2 {

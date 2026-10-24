@@ -6,19 +6,23 @@
 
     <div class="area-layout">
       <div class="panel">
-        <div class="toolbar">
-          <el-select v-model="cameraId" placeholder="选择摄像头" style="width: 200px" @change="onCameraChange">
-            <el-option v-for="camera in cameras" :key="camera.id" :label="camera.cameraName" :value="camera.id" />
-          </el-select>
-          <el-input v-model="form.areaName" placeholder="区域名称，如：塔吊吊装危险区" style="width: 220px" />
-          <el-select v-model="form.areaType" style="width: 130px">
-            <el-option label="危险区域" value="DANGER" />
-            <el-option label="安全区域" value="SAFE" />
-          </el-select>
-          <el-button :icon="Refresh" @click="refreshSnapshot">刷新画面</el-button>
-          <el-button :disabled="!points.length" @click="undo">撤销</el-button>
-          <el-button :disabled="!points.length" @click="clearPoints">清空</el-button>
-          <el-button type="primary" :loading="saving" @click="save">保存区域</el-button>
+        <div class="toolbar area-toolbar">
+          <div class="filter-row">
+            <el-select v-model="cameraId" placeholder="选择摄像头" style="width: 190px" @change="onCameraChange">
+              <el-option v-for="camera in cameras" :key="camera.id" :label="camera.cameraName" :value="camera.id" />
+            </el-select>
+            <el-input v-model="form.areaName" placeholder="区域名称，如：塔吊吊装危险区" style="width: 230px" />
+            <el-select v-model="form.areaType" style="width: 120px">
+              <el-option label="危险区域" value="DANGER" />
+              <el-option label="安全区域" value="SAFE" />
+            </el-select>
+          </div>
+          <div class="action-row">
+            <el-button :icon="Refresh" @click="refreshSnapshot">刷新画面</el-button>
+            <el-button :disabled="!points.length" @click="undo">撤销</el-button>
+            <el-button :disabled="!points.length" @click="clearPoints">清空</el-button>
+            <el-button type="primary" :loading="saving" @click="save">保存区域</el-button>
+          </div>
         </div>
 
         <div ref="wrapRef" class="canvas-wrap">
@@ -269,6 +273,20 @@ onBeforeUnmount(() => window.removeEventListener('resize', onResize))
 </script>
 
 <style scoped>
+.area-toolbar {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.filter-row,
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
 .area-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 340px;

@@ -10,13 +10,13 @@
 
     <div class="panel">
       <div class="toolbar">
-        <el-select v-model="filters.status" placeholder="处置状态" clearable style="width: 140px">
+        <el-select v-model="filters.status" placeholder="处置状态" clearable style="width: 126px">
           <el-option v-for="(label, value) in STATUS_LABELS" :key="value" :label="label" :value="value" />
         </el-select>
-        <el-select v-model="filters.behaviorType" placeholder="行为类型" clearable style="width: 160px">
+        <el-select v-model="filters.behaviorType" placeholder="行为类型" clearable style="width: 145px">
           <el-option v-for="(label, value) in BEHAVIOR_LABELS" :key="value" :label="label" :value="value" />
         </el-select>
-        <el-select v-model="filters.cameraId" placeholder="摄像头" clearable style="width: 180px">
+        <el-select v-model="filters.cameraId" placeholder="摄像头" clearable style="width: 160px">
           <el-option v-for="camera in cameras" :key="camera.id" :label="camera.cameraName" :value="camera.id" />
         </el-select>
         <el-date-picker
@@ -26,9 +26,9 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           value-format="YYYY-MM-DD"
-          style="width: 250px"
+          style="width: 228px"
         />
-        <el-input v-model="filters.keyword" placeholder="摄像头 / 告警编号" clearable style="width: 190px" @keyup.enter="search" />
+        <el-input v-model="filters.keyword" placeholder="摄像头 / 告警编号" clearable style="width: 168px" @keyup.enter="search" />
         <el-button type="primary" :icon="Search" @click="search">查询</el-button>
         <el-button @click="reset">重置</el-button>
       </div>
@@ -49,8 +49,13 @@
         </el-table-column>
         <el-table-column prop="alarmNo" label="告警编号" min-width="170" show-overflow-tooltip />
         <el-table-column prop="cameraName" label="摄像头" min-width="110" show-overflow-tooltip />
-        <el-table-column label="行为类型" width="120">
-          <template #default="{ row }">{{ behaviorLabel(row.behaviorType) }}</template>
+        <el-table-column label="行为类型" width="130">
+          <template #default="{ row }">
+            <span class="behavior">
+              <i :class="row.level?.toLowerCase()" />
+              {{ behaviorLabel(row.behaviorType) }}
+            </span>
+          </template>
         </el-table-column>
         <el-table-column label="级别" width="70">
           <template #default="{ row }">
@@ -258,11 +263,40 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.behavior {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.behavior i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #94a3b8;
+  flex: none;
+}
+
+.behavior i.high {
+  background: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.behavior i.medium {
+  background: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+.behavior i.low {
+  background: #10b981;
+}
+
 .thumb {
   width: 58px;
   height: 38px;
-  border-radius: 5px;
+  border-radius: 6px;
   display: block;
+  border: 1px solid #eef2f7;
 }
 
 .thumb.empty {
@@ -283,8 +317,9 @@ onMounted(async () => {
 .detail-img {
   width: 100%;
   max-height: 300px;
-  background: #0b1220;
-  border-radius: 8px;
+  background: #070d18;
+  border: 1px solid rgba(56, 189, 248, 0.14);
+  border-radius: 12px;
   margin-bottom: 14px;
 }
 
