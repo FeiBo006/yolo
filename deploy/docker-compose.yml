@@ -1,0 +1,118 @@
+name: yuanyu-safety
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: yuanyu-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-yuanyu123}
+      MYSQL_DATABASE: yuanyu
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD:-yuanyu123}"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: yuanyu-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: yuanyu-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      TZ: Asia/Shanghai
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+    restart: unless-stopped
+
+  backend:
+    build: ../backend
+    container_name: yuanyu-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: mysql,redis,mq
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: "5672"
+      MYSQL_HOST: mysql
+      MYSQL_PORT: "3306"
+      MYSQL_DB: yuanyu
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD:-yuanyu123}
+      INTERNAL_TOKEN: ${INTERNAL_TOKEN:-yuanyu-internal-2026}
+      AI_BASE_URL: http://ai:8000
+      CORS_ORIGINS: http://localhost,http://127.0.0.1
+      TZ: Asia/Shanghai
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  ai:
+    build: ../ai-service
+    container_name: yuanyu-ai
+    environment:
+      BACKEND_BASE_URL: http://backend:8080
+      INTERNAL_TOKEN: ${INTERNAL_TOKEN:-yuanyu-internal-2026}
+      DETECTOR_MODE: auto
+      DEVICE: cpu
+      PUBLISH_MODE: rabbit
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/%2F
+      TZ: Asia/Shanghai
+    volumes:
+      - ../ai-service/weights:/app/weights:ro
+      - ai-snapshots:/app/snapshots
+    ports:
+      - "8000:8000"
+    depends_on:
+      - backend
+      - rabbitmq
+    restart: unless-stopped
+
+  web:
+    build: ../frontend
+    container_name: yuanyu-web
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - ai
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
+  redis-data:
+  ai-snapshots:

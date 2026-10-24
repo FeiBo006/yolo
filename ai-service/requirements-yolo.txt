@@ -1,0 +1,7 @@
+# YOLO 训练与推理依赖（体积较大，按需安装）
+torch>=2.4,<2.7
+torchvision>=0.19,<0.22
+ultralytics>=8.3.0,<9
+lap>=0.5.12
+onnx>=1.16
+onnxruntime>=1.19

@@ -1,0 +1,33 @@
+# Java
+backend/target/
+backend/data/
+backend/uploads/
+*.class
+*.log
+
+# Python
+ai-service/.venv/
+ai-service/__pycache__/
+**/__pycache__/
+*.pyc
+ai-service/weights/safety.pt
+ai-service/weights/*.onnx
+ai-service/weights/*.engine
+ai-service/snapshots/*.jpg
+ai-service/datasets/
+ai-service/runs/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+npm-debug.log*
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+
+# Env
+.env
+.env.local
