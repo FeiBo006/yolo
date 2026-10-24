@@ -87,8 +87,8 @@ class RuleEngine:
             behavior_last = self.last_behavior_alarm.get(behavior, 0.0)
             if now.timestamp() - last < max(0, rule.cooldown_seconds):
                 continue
-            # 同一路视频同类告警至少间隔 10 秒，避免多人同时触发时刷屏
-            if now.timestamp() - behavior_last < 10:
+            # 同一路视频同类告警至少间隔 30 秒，避免多人同时触发时刷屏
+            if now.timestamp() - behavior_last < 30:
                 continue
             self.last_alarm[key] = now.timestamp()
             self.last_behavior_alarm[behavior] = now.timestamp()

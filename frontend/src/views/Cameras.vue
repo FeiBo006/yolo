@@ -15,32 +15,32 @@
       </div>
 
       <el-table v-loading="loading" :data="cameras" stripe>
-        <el-table-column prop="id" label="ID" width="60" />
-        <el-table-column prop="cameraName" label="摄像头名称" min-width="150" />
-        <el-table-column prop="siteName" label="所属工地" min-width="150" show-overflow-tooltip />
-        <el-table-column label="类型" width="90">
+        <el-table-column prop="id" label="ID" width="54" />
+        <el-table-column prop="cameraName" label="摄像头名称" min-width="140" />
+        <el-table-column prop="siteName" label="所属工地" min-width="125" show-overflow-tooltip />
+        <el-table-column label="类型" width="78">
           <template #default="{ row }">
             <el-tag size="small" :type="row.streamType === 'DEMO' ? 'warning' : 'info'" effect="plain">
               {{ row.streamType }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="streamUrl" label="视频源地址" min-width="200" show-overflow-tooltip>
+        <el-table-column prop="streamUrl" label="视频源地址" min-width="165" show-overflow-tooltip>
           <template #default="{ row }">{{ row.streamUrl || '-' }}</template>
         </el-table-column>
-        <el-table-column prop="location" label="安装位置" width="130" show-overflow-tooltip />
-        <el-table-column label="状态" width="90">
+        <el-table-column prop="location" label="安装位置" width="108" show-overflow-tooltip />
+        <el-table-column label="状态" width="76">
           <template #default="{ row }">
             <span class="status-dot" :class="{ online: row.online }" />
             {{ row.online ? '在线' : '离线' }}
           </template>
         </el-table-column>
-        <el-table-column label="启用" width="80">
+        <el-table-column label="启用" width="66">
           <template #default="{ row }">
             <el-switch :model-value="row.enabled === 1" @change="(val: boolean) => toggle(row, val)" />
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="210" fixed="right">
+        <el-table-column label="操作" width="210">
           <template #default="{ row }">
             <el-button text type="primary" size="small" @click="testCamera(row)">测试</el-button>
             <el-button text type="primary" size="small" @click="openEdit(row)">编辑</el-button>

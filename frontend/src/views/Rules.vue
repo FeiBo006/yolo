@@ -7,38 +7,38 @@
 
     <div class="panel">
       <el-table v-loading="loading" :data="rules" stripe>
-        <el-table-column prop="ruleName" label="规则名称" min-width="170" />
-        <el-table-column label="行为类型" width="140">
+        <el-table-column prop="ruleName" label="规则名称" min-width="150" />
+        <el-table-column label="行为类型" width="120">
           <template #default="{ row }">{{ behaviorLabel(row.behaviorType) }}</template>
         </el-table-column>
-        <el-table-column label="生效范围" width="150">
+        <el-table-column label="生效范围" width="130">
           <template #default="{ row }">{{ row.cameraId ? row.cameraName : '全部摄像头' }}</template>
         </el-table-column>
-        <el-table-column label="置信度" width="90">
+        <el-table-column label="置信度" width="80">
           <template #default="{ row }">{{ percent(row.minConfidence) }}</template>
         </el-table-column>
-        <el-table-column label="连续帧" width="80">
+        <el-table-column label="连续帧" width="70">
           <template #default="{ row }">{{ row.consecutiveFrames }} 帧</template>
         </el-table-column>
-        <el-table-column label="冷却" width="90">
+        <el-table-column label="冷却" width="80">
           <template #default="{ row }">{{ row.cooldownSeconds }} 秒</template>
         </el-table-column>
-        <el-table-column label="级别" width="80">
+        <el-table-column label="级别" width="70">
           <template #default="{ row }">
             <el-tag :type="levelType(row.level)" size="small" effect="dark">{{ levelLabel(row.level) }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="生效时段" width="130">
+        <el-table-column label="生效时段" width="110">
           <template #default="{ row }">
             {{ row.startTime && row.endTime ? `${row.startTime} - ${row.endTime}` : '全天' }}
           </template>
         </el-table-column>
-        <el-table-column label="启用" width="80">
+        <el-table-column label="启用" width="70">
           <template #default="{ row }">
             <el-switch :model-value="row.enabled === 1" @change="(val: boolean) => toggle(row, val)" />
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="140" fixed="right">
+        <el-table-column label="操作" width="140">
           <template #default="{ row }">
             <el-button text type="primary" size="small" @click="openEdit(row)">编辑</el-button>
             <el-button text type="danger" size="small" @click="remove(row)">删除</el-button>
