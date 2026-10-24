@@ -21,15 +21,49 @@
 - **操作审计**：非查询类接口自动记录操作日志
 - **可插拔中间件**：默认 H2 + HTTP 直投；`redis` / `mq` Profile 切换 Redis 与 RabbitMQ
 
-## 界面预览
+## 功能截图
 
-| 实时监控（DEMO） | 实时监控（真实 YOLO） |
-| --- | --- |
-| ![实时监控](docs/screenshots/03-monitor.png) | ![真实 YOLO](docs/screenshots/07-yolo-monitor.png) |
+### 登录与驾驶舱
 
-| 区域配置 | 可视化大屏 |
+| 登录 | 安全驾驶舱 |
 | --- | --- |
-| ![区域配置](docs/screenshots/05-areas.png) | ![可视化大屏](docs/screenshots/06-screen.png) |
+| ![登录](docs/screenshots/01-login.png) | ![安全驾驶舱](docs/screenshots/02-dashboard.png) |
+
+### 实时监控
+
+| DEMO 合成源 | 真实 YOLO 模型 |
+| --- | --- |
+| ![实时监控 DEMO](docs/screenshots/03-monitor.png) | ![真实 YOLO](docs/screenshots/07-yolo-monitor.png) |
+
+### 告警中心
+
+| 告警列表 | 告警详情与处置 |
+| --- | --- |
+| ![告警中心](docs/screenshots/04-alarms.png) | ![告警详情](docs/screenshots/14-alarm-detail.png) |
+
+### 业务配置
+
+| 工地管理（地址脱敏） | 摄像头管理 |
+| --- | --- |
+| ![工地管理](docs/screenshots/08-sites.png) | ![摄像头管理](docs/screenshots/09-cameras.png) |
+
+| 新增摄像头 | 区域配置 |
+| --- | --- |
+| ![新增摄像头](docs/screenshots/09b-camera-dialog.png) | ![区域配置](docs/screenshots/05-areas.png) |
+
+| 告警规则 | 统计分析 |
+| --- | --- |
+| ![告警规则](docs/screenshots/10-rules.png) | ![统计分析](docs/screenshots/11-statistics.png) |
+
+### 系统与大屏
+
+| 用户管理 | 操作日志 |
+| --- | --- |
+| ![用户管理](docs/screenshots/12-users.png) | ![操作日志](docs/screenshots/13-logs.png) |
+
+![可视化大屏](docs/screenshots/06-screen.png)
+
+> 全部 15 张功能截图与逐页功能说明见 [功能截图总览](docs/07-功能截图.md)。
 
 ## 系统架构
 
@@ -57,13 +91,63 @@ flowchart LR
 
 ## 技术栈
 
-| 层次 | 技术 |
-| --- | --- |
-| 算法 | Python 3.12、PyTorch、Ultralytics YOLOv8、OpenCV、ByteTrack、FastAPI |
-| 后端 | Java 21、Spring Boot 3.2、MyBatis-Plus、Spring Security + JWT、WebSocket、Redis（可选）、RabbitMQ（可选） |
-| 前端 | Vue 3、Vite、TypeScript、Pinia、Vue Router、Element Plus、ECharts |
-| 数据库 | H2（默认，零依赖）/ MySQL 8（生产） |
-| 部署 | Docker Compose、Nginx |
+> 版本为 2026-10-24 本机验证版本；完整说明、选型理由与降级策略见 [完整技术栈](docs/06-技术栈.md)。
+
+### 前端
+
+| 技术 | 版本 | 用途 |
+| --- | --- | --- |
+| Vue | 3.5.44 | 组合式 API、页面组件 |
+| Vite | 6.4.5 | 开发服务器与生产构建 |
+| TypeScript | 5.9.3 | 类型系统 |
+| Pinia | 2.3.1 | 登录态、实时告警状态 |
+| Vue Router | 4.6.4 | 路由与角色守卫 |
+| Element Plus | 2.14.7 | 表格、表单、弹窗、抽屉 |
+| ECharts | 5.6.0 | 趋势、排行、环形图、大屏 |
+| Axios | 1.20.0 | REST 封装与 JWT 注入 |
+| Node.js | 24.21.0 | 前端构建运行时 |
+
+### 后端
+
+| 技术 | 版本 | 用途 |
+| --- | --- | --- |
+| Java | 21 | 运行时 |
+| Spring Boot | 3.2.12 | Web、自动配置、依赖管理 |
+| Spring Security | Boot 内置 | 认证授权 |
+| JJWT | 0.12.6 | JWT 签发与校验 |
+| MyBatis-Plus | 3.5.7 | ORM、分页、逻辑删除 |
+| Spring WebSocket | Boot 内置 | 告警实时推送 |
+| Spring AOP | Boot 内置 | 操作日志审计 |
+| Apache POI | 5.2.5 | Excel 导出 |
+| Maven | 3.9.16 | 构建与测试 |
+
+### 算法与视觉
+
+| 技术 | 版本 | 用途 |
+| --- | --- | --- |
+| Python | 3.12.14 | 算法服务运行时 |
+| PyTorch | 2.6.0 | 深度学习推理 |
+| Ultralytics | 8.4.185 | YOLOv8 训练/推理 |
+| YOLOv8n | - | PPE 与 COCO person 双模型 |
+| ByteTrack | Ultralytics 内置 | 多目标跟踪 |
+| OpenCV | 4.10.0.84 | 拉流、绘制、MJPEG |
+| NumPy | 2.5.4 | 图像矩阵运算 |
+| FastAPI | 0.115.6 | 算法服务 REST |
+| Uvicorn | 0.34.0 | ASGI 服务器 |
+| Pika | 1.3.2 | RabbitMQ 客户端 |
+| lap | 0.5.13 | ByteTrack 匹配依赖 |
+
+### 数据、中间件与部署
+
+| 技术 | 版本 | 用途 |
+| --- | --- | --- |
+| H2 | 2.3.232 | 默认文件数据库 |
+| MySQL | 8.0 | 生产数据库 |
+| Redis | 7 | Token 黑名单（可选） |
+| RabbitMQ | 3.13 | 告警事件队列（可选） |
+| Nginx | 1.27 | 静态资源与反向代理 |
+| Docker Compose | v2 | 六容器编排 |
+| Git / GitHub | - | 版本管理与交付 |
 
 ## 目录结构
 
@@ -347,6 +431,8 @@ mvn spring-boot:run
 - [测试与验收](docs/04-测试与验收.md)
 - [算法服务说明](ai-service/README.md)
 - [部署说明](deploy/README.md)
+- [完整技术栈](docs/06-技术栈.md)
+- [功能截图总览](docs/07-功能截图.md)
 - [上传到 GitHub](docs/05-GitHub上传.md)
 
 ## 致谢
