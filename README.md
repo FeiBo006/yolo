@@ -19,6 +19,7 @@
 - **可视化大屏**：1920×1080 自适应，30 秒自动刷新
 - **权限管理**：JWT + ADMIN / MANAGER / INSPECTOR 三角色
 - **操作审计**：非查询类接口自动记录操作日志
+- **UI 微交互**：卡片 3D 倾斜/聚光、按钮光泽、数字滚动、登录光晕（Uiverse 风格）
 - **可插拔中间件**：默认 H2 + HTTP 直投；`redis` / `mq` Profile 切换 Redis 与 RabbitMQ
 
 ## 功能截图
@@ -28,6 +29,10 @@
 | 登录 | 安全驾驶舱 |
 | --- | --- |
 | ![登录](docs/screenshots/01-login.png) | ![安全驾驶舱](docs/screenshots/02-dashboard.png) |
+
+![卡片聚光与倾斜](docs/screenshots/15-ui-hover.png)
+
+> 指标卡 3D 倾斜、跟随光斑、数字滚动；主按钮悬停光泽；登录页光晕。
 
 ### 实时监控
 
@@ -63,7 +68,7 @@
 
 ![可视化大屏](docs/screenshots/06-screen.png)
 
-> 全部 15 张功能截图与逐页功能说明见 [功能截图总览](docs/07-功能截图.md)。
+> 全部 16 张功能截图与逐页功能说明见 [功能截图总览](docs/07-功能截图.md)。
 
 ## 系统架构
 
@@ -91,7 +96,7 @@ flowchart LR
 
 ## 技术栈
 
-> 版本为 2026-10-24 本机验证版本；完整说明、选型理由与降级策略见 [完整技术栈](docs/06-技术栈.md)。
+> 版本为 2026-10-25 本机验证版本；完整说明、选型理由与降级策略见 [完整技术栈](docs/06-技术栈.md)。
 
 ### 前端
 
@@ -106,6 +111,9 @@ flowchart LR
 | ECharts | 5.6.0 | 趋势、排行、环形图、大屏 |
 | Axios | 1.20.0 | REST 封装与 JWT 注入 |
 | Node.js | 24.21.0 | 前端构建运行时 |
+
+UI 微交互参考 [Uiverse.io](https://uiverse.io/) 开源组件（MIT），使用原生 CSS/Vue 重写：
+卡片倾斜与聚光、按钮光泽、输入聚焦、渐变开关、数字滚动、登录光晕。
 
 ### 后端
 
@@ -449,6 +457,6 @@ mvn spring-boot:run
 - YOLOv8 / Ultralytics：AGPL-3.0
 - `ppe_best.pt`：MIT（来自 HuggingFace 开源模型）
 - 演示视频素材来自 SHWD 公开数据集示例图，已做人脸模糊，仅用于教学演示；公开传播前请替换为自有素材
-- UI 微交互参考 Uiverse.io 开源组件（MIT），具体组件链接见 [完整技术栈](docs/06-技术栈.md)
+- UI 微交互参考 [Uiverse.io](https://uiverse.io/) 开源组件（MIT），具体组件链接见 [完整技术栈](docs/06-技术栈.md)
 
 本项目仅用于学习与毕业设计演示，请勿直接用于真实工地的安全生产决策。

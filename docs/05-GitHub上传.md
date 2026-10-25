@@ -57,8 +57,8 @@ HTTPS 推送时，密码处填写 **Personal Access Token**（GitHub 已不支�
 - `backend/`、`frontend/`、`ai-service/` 源码
 - `deploy/`、`docs/`、`README.md`
 - `ai-service/weights/ppe_best.pt`（6 MB）、`yolov8n.pt`（6 MB）
-- `ai-service/videos/demo_site.mp4`（7 MB）
-- `docs/screenshots/*.png`（约 5 MB）
+- `ai-service/videos/demo_site.mp4`（4 MB，人脸已模糊）
+- `docs/screenshots/*.png`（16 张，约 5 MB）
 
 不会提交（见 `.gitignore`）：
 
@@ -68,7 +68,7 @@ HTTPS 推送时，密码处填写 **Personal Access Token**（GitHub 已不支�
 - `ai-service/weights/safety.pt`（自训练权重，按需自行分发）
 - `.env`、日志、IDE 配置
 
-仓库体积约 25–30 MB，低于 GitHub 单文件 100 MB 限制，无需 Git LFS。
+仓库跟踪文件约 22 MB，低于 GitHub 单文件 100 MB 限制，无需 Git LFS。
 
 ## 5. 后续更新
 
