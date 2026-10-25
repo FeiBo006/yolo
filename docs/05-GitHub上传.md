@@ -16,6 +16,75 @@ git status --short | grep -E "node_modules|\.venv|target/|backend/data|snapshots
 
 默认配置中的 JWT 密钥、内部 Token、MySQL 密码均为开发占位值，生产环境必须通过环境变量覆盖。
 
+### 1.1 隐私与敏感信息复核（2026-10-25）
+
+对当前 HEAD 与本地目录做了检查：
+
+| 项目 | 结果 |
+| --- | --- |
+| 真实姓名 / 住址 / 身份证 / 银行卡 | 未发现 |
+| 真实手机号 | 未发现；演示数据为 `1380000000x` 虚构号码 |
+| 工地地址 | 代码和页面均已脱敏，示例地址为虚构的「示例市/示例区」 |
+| API Key / 私钥 / `.env` | 未发现；`.env` 未被跟踪 |
+| 数据库 / 告警截图 / 虚拟环境 | 未被 Git 跟踪（见 `.gitignore`） |
+| 演示视频人脸 | 当前版本已模糊处理 |
+| Git 作者邮箱 | 提交记录使用本机个人邮箱，push 后会公开 |
+| 默认开发凭据 | JWT 密钥、内部 Token、MySQL/RabbitMQ 默认密码仍在代码中 |
+
+**历史提交需要特别注意**：
+
+当前 `HEAD` 是脱敏后的版本，但 Git 历史中仍保留旧版演示视频和旧版截图（未模糊人脸）。
+即使当前文件已替换，检出旧提交仍能看到这些内容。计划公开仓库时，建议在首次 push 前压缩历史。
+
+审计命令：
+
+```bash
+# 查看提交作者邮箱
+git log --format='%h %an <%ae>' | sort -u
+
+# 查看历史中的大文件
+git rev-list --objects --all \
+  | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' \
+  | awk '$1=="blob" && $3>1000000'
+
+# 查看当前被忽略但仍在本地目录中的内容
+git status --ignored --short
+```
+
+如果确认要清理历史（**仅在尚未 push 时执行**）：
+
+```bash
+# 1. 先在仓库外备份一份完整历史
+git bundle create ../yuanyu-history.bundle --all
+
+# 2. 配置 GitHub noreply 身份
+git config user.name "your-github-name"
+git config user.email "your-github-name@users.noreply.github.com"
+
+# 3. 用当前干净文件创建新的初始提交
+git checkout --orphan clean-main
+git add -A
+git commit -m "feat: 基于 YOLO 的工地安全行为实时检测预警系统 v1.0"
+git branch -D main
+git branch -m main
+
+# 4. 本地清理旧对象（确认新提交无误后再执行）
+git reflog expire --expire=now --all
+git gc --prune=now --aggressive
+```
+
+> 备份 bundle 中包含旧版素材，仅保存在本地，不要上传到 GitHub。
+> 压缩历史会改变所有提交哈希；如果已经 push，需要 force push 并通知协作者。
+
+本地忽略目录中还有：
+
+- `backend/data/`：约 1.9 MB，H2 演示数据库（含虚拟账号与操作日志）
+- `ai-service/snapshots/`：约 91 MB、上千张告警截图
+- `.vscode/`：仅一条 Java 编译设置
+- `ai-service/.venv/`、`frontend/node_modules/`：依赖目录
+
+这些不会进入 Git；但**不要直接压缩整个项目目录上传**，否则会连同数据库、告警截图一起泄露。
+
 ## 2. 在 GitHub 创建空仓库
 
 打开 <https://github.com/new>：
