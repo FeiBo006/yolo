@@ -387,10 +387,29 @@ onMounted(loadAll)
 }
 
 .hero-btn.primary {
+  position: relative;
+  overflow: hidden;
   border: none;
   color: #0b1a33;
   background: linear-gradient(90deg, #e0f2fe, #a5f3fc);
   box-shadow: 0 8px 20px -10px rgba(165, 243, 252, 0.8);
+}
+
+.hero-btn.primary::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  left: -80%;
+  width: 46%;
+  height: 160%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent);
+  transform: skewX(-22deg);
+  transition: left 0.65s ease;
+  pointer-events: none;
+}
+
+.hero-btn.primary:hover::after {
+  left: 132%;
 }
 
 .hero-btn.primary:hover {
@@ -509,6 +528,12 @@ onMounted(loadAll)
 
 .behavior i.low {
   background: #10b981;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-btn.primary::after {
+    transition: none;
+  }
 }
 
 @media (max-width: 900px) {

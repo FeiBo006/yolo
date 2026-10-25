@@ -343,8 +343,20 @@ onBeforeUnmount(() => disconnectAlarmSocket())
 
 .menu :deep(.el-menu-item.is-active) {
   color: #fff !important;
-  background: linear-gradient(90deg, rgba(37, 99, 235, 0.95), rgba(6, 182, 212, 0.55)) !important;
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.95), rgba(6, 182, 212, 0.55), rgba(37, 99, 235, 0.95)) !important;
+  background-size: 200% 100% !important;
   box-shadow: 0 10px 24px -14px rgba(37, 99, 235, 0.9);
+  animation: menu-flow 9s ease infinite;
+}
+
+@keyframes menu-flow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .menu :deep(.el-menu-item.is-active::before) {
@@ -567,6 +579,12 @@ onBeforeUnmount(() => disconnectAlarmSocket())
   height: calc(100vh - 58px);
   overflow-y: auto;
   background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu :deep(.el-menu-item.is-active) {
+    animation: none;
+  }
 }
 
 @media (max-width: 980px) {

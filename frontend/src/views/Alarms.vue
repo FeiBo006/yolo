@@ -279,7 +279,19 @@ onMounted(async () => {
 
 .behavior i.high {
   background: #ef4444;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  animation: alert-dot 2s ease-out infinite;
+}
+
+@keyframes alert-dot {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.35);
+  }
+  70% {
+    box-shadow: 0 0 0 7px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
 }
 
 .behavior i.medium {

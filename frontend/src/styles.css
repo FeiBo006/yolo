@@ -274,3 +274,81 @@ a {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== Uiverse 风格微交互 ===== */
+.el-button--primary:not(.is-disabled):not(.is-text):not(.is-link):not(.is-plain) {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.el-button--primary:not(.is-disabled):not(.is-text):not(.is-link):not(.is-plain) > span {
+  position: relative;
+  z-index: 2;
+}
+
+.el-button--primary:not(.is-disabled):not(.is-text):not(.is-link):not(.is-plain)::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  left: -80%;
+  width: 46%;
+  height: 160%;
+  z-index: 1;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.42), transparent);
+  transform: skewX(-22deg);
+  transition: left 0.65s ease;
+  pointer-events: none;
+}
+
+.el-button--primary:not(.is-disabled):not(.is-text):not(.is-link):not(.is-plain):hover::after {
+  left: 132%;
+}
+
+.el-input__wrapper,
+.el-select__wrapper,
+.el-textarea__inner {
+  transition: box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.el-input__wrapper.is-focus,
+.el-select__wrapper.is-focused,
+.el-textarea__inner:focus {
+  box-shadow: 0 0 0 1px #2563eb inset, 0 0 0 4px rgba(37, 99, 235, 0.1) !important;
+  transform: translateY(-1px);
+}
+
+.el-switch__core {
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+}
+
+.el-switch.is-checked .el-switch__core {
+  border-color: transparent !important;
+  background: linear-gradient(90deg, #2563eb, #06b6d4) !important;
+}
+
+.el-switch:hover .el-switch__core {
+  transform: scale(1.04);
+}
+
+.el-switch.is-checked .el-switch__action {
+  box-shadow: 0 2px 7px rgba(2, 12, 27, 0.28);
+}
+
+.panel {
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.panel:hover {
+  border-color: rgba(37, 99, 235, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .el-button--primary::after,
+  .el-switch__core,
+  .el-input__wrapper,
+  .el-select__wrapper,
+  .el-textarea__inner {
+    transition: none !important;
+  }
+}

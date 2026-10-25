@@ -20,8 +20,10 @@
         <el-table-column label="连续帧" width="70">
           <template #default="{ row }">{{ row.consecutiveFrames }} 帧</template>
         </el-table-column>
-        <el-table-column label="冷却" width="80">
-          <template #default="{ row }">{{ row.cooldownSeconds }} 秒</template>
+        <el-table-column label="冷却" width="86">
+          <template #default="{ row }">
+            {{ row.cooldownSeconds >= 60 ? `${Math.round(row.cooldownSeconds / 60)} 分钟` : `${row.cooldownSeconds} 秒` }}
+          </template>
         </el-table-column>
         <el-table-column label="级别" width="70">
           <template #default="{ row }">

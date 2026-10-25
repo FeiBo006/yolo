@@ -1,6 +1,8 @@
 <template>
   <div class="login-page">
     <div class="brand">
+      <span class="orb orb-a" />
+      <span class="orb orb-b" />
       <div class="brand-inner">
         <div class="badge">毕业设计 · 计算机视觉 + 全栈</div>
         <h1>工地安全行为<br /><span>实时检测预警系统</span></h1>
@@ -129,6 +131,41 @@ async function submit() {
     linear-gradient(90deg, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
   background-size: 42px 42px;
   mask-image: linear-gradient(to bottom, transparent, #000 30%, #000 70%, transparent);
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(64px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.orb-a {
+  top: -80px;
+  left: -90px;
+  width: 340px;
+  height: 340px;
+  background: rgba(37, 99, 235, 0.42);
+  animation: orb-drift 14s ease-in-out infinite alternate;
+}
+
+.orb-b {
+  right: 6%;
+  bottom: -100px;
+  width: 300px;
+  height: 300px;
+  background: rgba(6, 182, 212, 0.26);
+  animation: orb-drift 18s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes orb-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(46px, 34px, 0) scale(1.12);
+  }
 }
 
 .brand-inner {
@@ -268,6 +305,12 @@ h2 {
   margin-top: 34px;
   font-size: 11px;
   color: #cbd5e1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb {
+    animation: none;
+  }
 }
 
 @media (max-width: 900px) {

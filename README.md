@@ -441,6 +441,7 @@ mvn spring-boot:run
 - [ByteTrack](https://github.com/ifzhang/ByteTrack)
 - PPE 预训练权重：[baskarmother/yolov8-ppe-construction](https://huggingface.co/baskarmother/yolov8-ppe-construction)（MIT）
 - 数据集参考：SHWD、Roboflow Construction Site Safety
+- UI 微交互参考：[Uiverse.io](https://uiverse.io/) 开源组件（MIT），已用原生 CSS 重写
 
 ## 许可
 
@@ -448,5 +449,6 @@ mvn spring-boot:run
 - YOLOv8 / Ultralytics：AGPL-3.0
 - `ppe_best.pt`：MIT（来自 HuggingFace 开源模型）
 - 演示视频素材来自 SHWD 公开数据集示例图，已做人脸模糊，仅用于教学演示；公开传播前请替换为自有素材
+- UI 微交互参考 Uiverse.io 开源组件（MIT），具体组件链接见 [完整技术栈](docs/06-技术栈.md)
 
 本项目仅用于学习与毕业设计演示，请勿直接用于真实工地的安全生产决策。

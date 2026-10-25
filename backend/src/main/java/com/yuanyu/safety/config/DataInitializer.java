@@ -123,9 +123,9 @@ public class DataInitializer implements CommandLineRunner {
         area2.setEnabled(1);
         areaMapper.insert(area2);
 
-        createRule("未佩戴安全帽监测", "NO_HELMET", new BigDecimal("0.450"), 3, 300, "HIGH");
-        createRule("未穿反光衣监测", "NO_VEST", new BigDecimal("0.450"), 3, 360, "MEDIUM");
-        createRule("危险区域入侵监测", "INTRUSION", new BigDecimal("0.400"), 2, 420, "HIGH");
+        createRule("未佩戴安全帽监测", "NO_HELMET", new BigDecimal("0.450"), 3, 1800, "HIGH");
+        createRule("未穿反光衣监测", "NO_VEST", new BigDecimal("0.450"), 3, 1800, "MEDIUM");
+        createRule("危险区域入侵监测", "INTRUSION", new BigDecimal("0.400"), 2, 1800, "HIGH");
 
         seedAlarms(cam1, cam2);
         seedDetections(cam1.getId(), cam2.getId());
